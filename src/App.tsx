@@ -3,6 +3,9 @@ import './App.css';
 import ToDoList from "./components/TodoList/ToDoList";
 import {v1} from "uuid";
 import {AddItemForm} from "./components/AddItemForm/AddItemForm";
+import {AppBar, IconButton, Typography, Button, Toolbar, Container, Grid, Paper} from "@material-ui/core";
+import MenuIcon from '@material-ui/icons/Menu';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
 export type TodoListsType = {
     id: string
@@ -113,19 +116,23 @@ function App() {
         }
 
         return (
-            <ToDoList key={tl.id}
-                      id={tl.id}
-                      title={tl.title}
-                      tasks={tasksForToDoList}
-                      removeTask={removeTask}
-                      removeTodoList={removeTodoList}
-                      changeFilter={changeFilter}
-                      addTask={addTask}
-                      changeTaskStatus={changeTaskStatus}
-                      filter={tl.filter}
-                      changeTaskTitle={changeTaskTitle}
-                      changeListTitle={onChangeTodoListTitle}
-            />
+            <Grid item>
+                <Paper style={{padding: "10px"}}>
+                    <ToDoList key={tl.id}
+                              id={tl.id}
+                              title={tl.title}
+                              tasks={tasksForToDoList}
+                              removeTask={removeTask}
+                              removeTodoList={removeTodoList}
+                              changeFilter={changeFilter}
+                              addTask={addTask}
+                              changeTaskStatus={changeTaskStatus}
+                              filter={tl.filter}
+                              changeTaskTitle={changeTaskTitle}
+                              changeListTitle={onChangeTodoListTitle}
+                    />
+                </Paper>
+            </Grid>
         )
     })
 
@@ -137,13 +144,45 @@ function App() {
         }
         setTodoLists([newTodoList, ...todoLists])
         setTasks({[newTodoList.id]: [], ...tasks})
-
     }
+
+    const useStyles = makeStyles((theme: Theme) =>
+        createStyles({
+            root: {
+                flexGrow: 1,
+            },
+            menuButton: {
+                marginRight: theme.spacing(2),
+            },
+            title: {
+                flexGrow: 1,
+            },
+        }),
+    );
+
+    const classes = useStyles();
 
     return (
         <div className="App">
-            <AddItemForm addItem={addTodoList} />
-            {mapTodoLists}
+            <AppBar position="static">
+                <Toolbar>
+                    <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+                        <MenuIcon />
+                    </IconButton>
+                    <Typography variant="h6" className={classes.title}>
+                        News
+                    </Typography>
+                    <Button color="inherit">Login</Button>
+                </Toolbar>
+            </AppBar>
+            <Container fixed>
+                <Grid container style={{padding: "20px"}}>
+                    <AddItemForm addItem={addTodoList} />
+                </Grid>
+                <Grid container spacing={3}>
+                    {mapTodoLists}
+                </Grid>
+            </Container>
         </div>
     )
 }

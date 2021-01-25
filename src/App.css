@@ -1,16 +1,5 @@
-.App {
-  padding: 30px;
-  display: flex;
-}
-
-.App > div {
-  margin-right: 50px;
-}
-
-.active-filter {
-  background-color: aquamarine;
-}
-
-.is-done {
-  opacity: 0.5;
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
 }

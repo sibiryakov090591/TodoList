@@ -1,6 +1,7 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
 import styles from './AddItemForm.module.css';
-
+import {Button, IconButton, TextField} from "@material-ui/core";
+import {AddBox} from "@material-ui/icons";
 
 type PropsType = {
     addItem: (title: string) => void
@@ -20,24 +21,29 @@ export const AddItemForm: React.FC<PropsType> = (props) => {
         }
     }
 
-    const onChangeHandler = (e:ChangeEvent<HTMLInputElement>) => {
+    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setTitle(e.currentTarget.value)
     }
 
-    const onKeyPressHandler = (e:KeyboardEvent<HTMLInputElement>) => {
+    const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
         setError(null)
         if (e.key === "Enter") addItem()
     }
 
     return (
         <div>
-            <input value={title}
-                   onChange={onChangeHandler}
-                   onKeyPress={onKeyPressHandler}
-                   className={error ? styles.error : ""}
+            <TextField variant={"outlined"}
+                       value={title}
+                       onChange={onChangeHandler}
+                       onKeyPress={onKeyPressHandler}
+                       error={!!error}
+                       helperText={error}
+                       label={"Title"}
             />
-            <button onClick={addItem}>+</button>
-            {error && <div className={styles.errorMessage}>{error}</div>}
+            <IconButton onClick={addItem}
+                        color={"primary"}>
+                <AddBox/>
+            </IconButton>
         </div>
     )
 }
