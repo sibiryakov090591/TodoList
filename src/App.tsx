@@ -5,16 +5,15 @@ import {v1} from "uuid";
 import {AddItemForm} from "./components/AddItemForm/AddItemForm";
 import {AppBar, IconButton, Typography, Button, Toolbar, Container, Grid, Paper} from "@material-ui/core";
 import MenuIcon from '@material-ui/icons/Menu';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
-export type TodoListsType = {
+export type TodoListType = {
     id: string
     title: string
     filter: string
 }
 
 export type TasksType = {
-    [key: string]: Array<TaskType>
+    [key: string]: TaskType[]
 }
 
 export type TaskType = {
@@ -30,7 +29,7 @@ function App() {
     const todoListId1 = v1()
     const todoListId2 = v1()
 
-    const [todoLists, setTodoLists] = useState<Array<TodoListsType>>([
+    const [todoLists, setTodoLists] = useState<Array<TodoListType>>([
         {
             id: todoListId1,
             title: "What to learn",
@@ -43,7 +42,7 @@ function App() {
         }
     ])
 
-    let [tasks, setTasks] = useState<TasksType>({
+    const [tasks, setTasks] = useState<TasksType>({
         [todoListId1]: [
             {id: v1(), title: "HTML&CSS", isDone: true},
             {id: v1(), title: "JS", isDone: true},
@@ -91,6 +90,23 @@ function App() {
         }
     }
 
+    const onChangeTodoListTitle = (newTitle: string, todoListId: string) => {
+        const copyTodoLists = [...todoLists]
+        const list = copyTodoLists.find(i => i.id === todoListId)
+        if (list) list.title = newTitle
+        setTodoLists(copyTodoLists)
+    }
+
+    const addTodoList = (title: string) => {
+        const newTodoList: TodoListType = {
+            id: v1(),
+            title: title,
+            filter: "all"
+        }
+        setTodoLists([newTodoList, ...todoLists])
+        setTasks({[newTodoList.id]: [], ...tasks})
+    }
+
     const mapTodoLists = todoLists.map(tl => {
         const allTodoListTasks = tasks[tl.id]
         let tasksForToDoList = tasks[tl.id];
@@ -106,13 +122,6 @@ function App() {
             const task = copy[tl.id].find(i => i.id === taskId)
             if (task) task.title = newTitleValue
             setTasks(copy)
-        }
-
-        const onChangeTodoListTitle = (newTitle: string, todoListId: string) => {
-            const copyTodoLists = [...todoLists]
-            const list = copyTodoLists.find(i => i.id === todoListId)
-            if (list) list.title = newTitle
-            setTodoLists(copyTodoLists)
         }
 
         return (
@@ -136,40 +145,14 @@ function App() {
         )
     })
 
-    const addTodoList = (title: string) => {
-        const newTodoList: TodoListsType = {
-            id: v1(),
-            title: title,
-            filter: "all"
-        }
-        setTodoLists([newTodoList, ...todoLists])
-        setTasks({[newTodoList.id]: [], ...tasks})
-    }
-
-    const useStyles = makeStyles((theme: Theme) =>
-        createStyles({
-            root: {
-                flexGrow: 1,
-            },
-            menuButton: {
-                marginRight: theme.spacing(2),
-            },
-            title: {
-                flexGrow: 1,
-            },
-        }),
-    );
-
-    const classes = useStyles();
-
     return (
         <div className="App">
             <AppBar position="static">
                 <Toolbar>
-                    <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+                    <IconButton color="inherit" aria-label="menu">
                         <MenuIcon />
                     </IconButton>
-                    <Typography variant="h6" className={classes.title}>
+                    <Typography variant="h6">
                         News
                     </Typography>
                     <Button color="inherit">Login</Button>
@@ -179,7 +162,7 @@ function App() {
                 <Grid container style={{padding: "20px"}}>
                     <AddItemForm addItem={addTodoList} />
                 </Grid>
-                <Grid container spacing={3}>
+                <Grid container spacing={3} alignItems={"stretch"}>
                     {mapTodoLists}
                 </Grid>
             </Container>
