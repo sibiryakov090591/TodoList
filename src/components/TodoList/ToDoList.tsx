@@ -15,7 +15,7 @@ type ToDoListType = {
     addTask: (title: string, todoListId: string) => void
     changeTaskStatus: (id: string, isDone: boolean, todoListId: string) => void
     filter: string
-    changeTaskTitle: (newTitleValue: string, taskId: string) => void
+    changeTaskTitle: (newTitleValue: string, taskId: string, todoListId: string) => void
     changeListTitle: (newTitleValue: string, todoListId: string) => void
 }
 
@@ -56,7 +56,7 @@ function ToDoList(props: ToDoListType) {
                             props.changeTaskStatus(task.id, newIsDoneValue, props.id)
                         }
                         const onChangeTaskTitleHandler = (title: string) => {
-                            props.changeTaskTitle(title, task.id)
+                            props.changeTaskTitle(title, task.id, props.id)
                         }
 
                         return (

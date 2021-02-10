@@ -3,13 +3,13 @@ import {v1} from "uuid";
 import {
     todoListsReducer,
     addTodoListAC,
-    deleteTodoListAC,
+    removeTodoListAC,
     changeTodoListTitleAC,
     changeTodoListFilterAC
 } from "./todolists-reducer";
 
-const todoListId1 = v1()
-const todoListId2 = v1()
+let todoListId1 = v1()
+let todoListId2 = v1()
 
 let state: TodoListType[] = [
     {
@@ -25,6 +25,8 @@ let state: TodoListType[] = [
 ]
 
 beforeEach(() => {
+    todoListId1 = v1()
+    todoListId2 = v1()
     state = [
         {
             id: todoListId1,
@@ -45,7 +47,7 @@ test("Add todoList", () => {
 })
 
 test("Delete todoList", () => {
-    const testData = todoListsReducer(state, deleteTodoListAC(todoListId1))
+    const testData = todoListsReducer(state, removeTodoListAC(todoListId1))
     expect(testData.length).toBe(1)
 })
 

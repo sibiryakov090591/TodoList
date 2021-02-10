@@ -4,7 +4,7 @@ import {v1} from "uuid";
 const todoListId1 = v1()
 const todoListId2 = v1()
 
-type DeleteTodoListType = {
+type RemoveTodoListType = {
     type: "DELETE_TODOLIST"
     todoListId: string
 }
@@ -24,22 +24,11 @@ type ChangeTodoListFilterType = {
     todoListId: string
 }
 
-type ActionType = DeleteTodoListType | AddTodoListType | ChangeTodoListTitleType | ChangeTodoListFilterType
+type ActionType = RemoveTodoListType | AddTodoListType | ChangeTodoListTitleType | ChangeTodoListFilterType
 
-const initialState: TodoListType[] = [
-    {
-        id: todoListId1,
-        title: "What to learn",
-        filter: "all"
-    },
-    {
-        id: todoListId2,
-        title: "What to buy",
-        filter: "all"
-    }
-]
+const initialState: TodoListType[] = []
 
-export const todoListsReducer = (state = initialState, action: ActionType) => {
+export const todoListsReducer = (state = initialState, action: ActionType): TodoListType[] => {
     switch (action.type) {
         case "DELETE_TODOLIST":
             return state.filter(item => item.id !== action.todoListId)
@@ -76,7 +65,7 @@ export const todoListsReducer = (state = initialState, action: ActionType) => {
     }
 }
 
-export const deleteTodoListAC = (todoListId: string): DeleteTodoListType => {
+export const removeTodoListAC = (todoListId: string): RemoveTodoListType => {
     return {
         type: "DELETE_TODOLIST",
         todoListId
