@@ -1,12 +1,13 @@
-import React, {ChangeEvent} from 'react';
+import React, {useCallback} from 'react';
 import {FilterValuesType, TaskType} from "../../App";
-import {AddItemForm} from "../AddItemForm/AddItemForm";
+import AddItemForm from "../AddItemForm/AddItemForm";
 import {EditableSpan} from "./EditableSpan/EditableSpan";
-import {Button, Checkbox, IconButton} from "@material-ui/core";
+import {Button, IconButton} from "@material-ui/core";
 import {Delete} from "@material-ui/icons";
+import Task from "../Task/Task";
 
 type ToDoListType = {
-    id: string
+    todoListId: string
     title: string
     tasks: Array<TaskType>
     removeTask: (taskID: string, todoListId: string) => void
@@ -21,20 +22,28 @@ type ToDoListType = {
 
 function ToDoList(props: ToDoListType) {
 
-    const addTask = (title: string) => {
-        props.addTask(title, props.id)
+    let tasksForToDoList = props.tasks;
+    if (props.filter === "active") {
+        tasksForToDoList = props.tasks.filter(t => !t.isDone)
+    }
+    if (props.filter === "completed") {
+        tasksForToDoList = props.tasks.filter(t => t.isDone)
     }
 
-    const removeTodoList = () => props.removeTodoList(props.id)
+    const addTask = useCallback((title: string) => {
+        props.addTask(title, props.todoListId)
+    }, [props.addTask, props.todoListId])
 
-    const onChangeTodoListTitleHandler = (title: string) => {
-        props.changeListTitle(title, props.id)
-    }
+    const removeTodoList = useCallback(() => props.removeTodoList(props.todoListId), [])
+
+    const onChangeTodoListTitleHandler = useCallback((title: string) => {
+        props.changeListTitle(title, props.todoListId)
+    }, [])
 
     // filters
-    const onAllClickHandler = () => props.changeFilter("all", props.id)
-    const onActiveClickHandler = () => props.changeFilter("active", props.id)
-    const onCompletedClickHandler = () => props.changeFilter("completed", props.id)
+    const onAllClickHandler = useCallback(() => props.changeFilter("all", props.todoListId), [props.changeFilter])
+    const onActiveClickHandler = useCallback(() => props.changeFilter("active", props.todoListId), [props.changeFilter])
+    const onCompletedClickHandler = useCallback(() => props.changeFilter("completed", props.todoListId), [props.changeFilter])
 
     return (
         <div>
@@ -47,33 +56,7 @@ function ToDoList(props: ToDoListType) {
             <AddItemForm addItem={addTask}/>
             <div style={{padding: "20px 0"}}>
                 {
-                    props.tasks.map(task => {
-                        const onClickHandler = () => {
-                            props.removeTask(task.id, props.id)
-                        }
-                        const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-                            let newIsDoneValue = e.currentTarget.checked
-                            props.changeTaskStatus(task.id, newIsDoneValue, props.id)
-                        }
-                        const onChangeTaskTitleHandler = (title: string) => {
-                            props.changeTaskTitle(title, task.id, props.id)
-                        }
-
-                        return (
-                            <div key={task.id}
-                                className={task.isDone ? "is-done" : ""}
-                            >
-                                <Checkbox color={"primary"}
-                                          checked={task.isDone}
-                                          onChange={onChangeHandler}
-                                />
-                                <EditableSpan title={task.title} onChange={onChangeTaskTitleHandler}/>
-                                <IconButton onClick={onClickHandler}>
-                                    <Delete/>
-                                </IconButton>
-                            </div>
-                        )
-                    })
+                    tasksForToDoList.map(task => <Task key={task.id} todoListId={props.todoListId} task={task}/>)
                 }
             </div>
             <div>
@@ -91,4 +74,4 @@ function ToDoList(props: ToDoListType) {
     )
 }
 
-export default ToDoList
+export default React.memo(ToDoList);

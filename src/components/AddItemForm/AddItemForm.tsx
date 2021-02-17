@@ -1,13 +1,12 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
-import styles from './AddItemForm.module.css';
-import {Button, IconButton, TextField} from "@material-ui/core";
+import {IconButton, TextField} from "@material-ui/core";
 import {AddBox} from "@material-ui/icons";
 
 type PropsType = {
     addItem: (title: string) => void
 }
 
-export const AddItemForm: React.FC<PropsType> = (props) => {
+const AddItemForm: React.FC<PropsType> = (props) => {
 
     const [error, setError] = useState<string | null>(null)
     const [title, setTitle] = useState("")
@@ -26,7 +25,9 @@ export const AddItemForm: React.FC<PropsType> = (props) => {
     }
 
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        setError(null)
+        if (error !== null) {
+            setError(null)
+        }
         if (e.key === "Enter") addItem()
     }
 
@@ -47,3 +48,5 @@ export const AddItemForm: React.FC<PropsType> = (props) => {
         </div>
     )
 }
+
+export default React.memo(AddItemForm)

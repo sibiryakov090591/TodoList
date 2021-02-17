@@ -8,7 +8,7 @@ type PropsType = {
 }
 
 export const EditableSpan: React.FC<PropsType> = (props) => {
-
+    console.log("Span")
     const [editMode, setEditMode] = useState<boolean>(false)
     const [title, setTitle] = useState<string>(props.title)
 

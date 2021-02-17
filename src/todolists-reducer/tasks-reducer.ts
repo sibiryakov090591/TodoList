@@ -42,15 +42,18 @@ type ActionType = RemoveTaskActionType
 
 const initialState: TasksType = {}
 
-export const tasksReducer = (state: TasksType = initialState, action: ActionType): TasksType  => {
+export const tasksReducer = (state: TasksType = initialState, action: ActionType): TasksType => {
 
     switch (action.type) {
         case "CHANGE_TASK_TITLE": {
-            const copyState = {...state}
-            const task = copyState[action.todoListId].find(i => i.id === action.taskId)
-            if (task) {
-                task.title = action.title
-                return copyState
+            return {
+                ...state,
+                [action.todoListId]: [...state[action.todoListId].map(i => {
+                    if (i.id === action.taskId) {
+                        i.title = action.title
+                        return i
+                    } else return i
+                })]
             }
         }
 
@@ -73,11 +76,14 @@ export const tasksReducer = (state: TasksType = initialState, action: ActionType
         }
 
         case "CHANGE_TASK_STATUS": {
-            const copyState = {...state}
-            const task = copyState[action.todoListId].find(i => i.id === action.taskId)
-            if (task) {
-                task.isDone = action.isDone
-                return copyState
+            return {
+                ...state,
+                [action.todoListId]: [...state[action.todoListId].map(i => {
+                    if (i.id === action.taskId) {
+                        i.isDone = action.isDone
+                        return i
+                    } else return i
+                })]
             }
         }
 
