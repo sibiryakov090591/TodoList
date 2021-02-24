@@ -6,12 +6,12 @@ import {TaskType} from "../../App";
 import {useDispatch} from "react-redux";
 import {changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from "../../todolists-reducer/tasks-reducer";
 
-type PropsType = {
+export type TaskPropsType = {
     todoListId: string
     task: TaskType
 }
 
-const Task: React.FC<PropsType> = (props) => {
+const Task: React.FC<TaskPropsType> = (props) => {
 
     const dispatch = useDispatch();
 

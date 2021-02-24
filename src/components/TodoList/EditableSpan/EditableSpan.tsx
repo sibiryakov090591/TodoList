@@ -2,12 +2,12 @@ import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
 import styles from './EditableSpan.module.css';
 import {TextField} from "@material-ui/core";
 
-type PropsType = {
+export type EditableSpanPropsType = {
     title: string
     onChange: (newTitleValue: string) => void
 }
 
-export const EditableSpan: React.FC<PropsType> = (props) => {
+export const EditableSpan: React.FC<EditableSpanPropsType> = (props) => {
     console.log("Span")
     const [editMode, setEditMode] = useState<boolean>(false)
     const [title, setTitle] = useState<string>(props.title)

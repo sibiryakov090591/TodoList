@@ -50,8 +50,7 @@ export const tasksReducer = (state: TasksType = initialState, action: ActionType
                 ...state,
                 [action.todoListId]: [...state[action.todoListId].map(i => {
                     if (i.id === action.taskId) {
-                        i.title = action.title
-                        return i
+                        return {...i, title: action.title}
                     } else return i
                 })]
             }
