@@ -1,9 +1,6 @@
 import {FilterValuesType, TodoListType} from "../App";
 import {v1} from "uuid";
 
-const todoListId1 = v1()
-const todoListId2 = v1()
-
 type RemoveTodoListType = {
     type: "DELETE_TODOLIST"
     todoListId: string
